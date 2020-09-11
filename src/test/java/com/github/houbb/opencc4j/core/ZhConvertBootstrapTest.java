@@ -1,6 +1,9 @@
 package com.github.houbb.opencc4j.core;
 
 import com.github.houbb.opencc4j.core.impl.ZhConvertBootstrap;
+import com.github.houbb.opencc4j.support.idiom.Idioms;
+import com.github.houbb.opencc4j.support.segment.impl.Segments;
+import com.github.houbb.opencc4j.support.variants.Variants;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -128,6 +131,23 @@ public class ZhConvertBootstrapTest {
 
         String expectToString = "[奮, 鬥]";
         Assert.assertEquals(expectToString, resultList.toString());
+    }
+
+    @Test
+    public void simpleToTraditionalWithIdiomsAndVariantsTest() {
+        final String original = "鼠标里面的硅二极管坏了，导致光标分辨率降低。\n" +
+                "我们在老挝的服务器的硬盘需要使用互联网算法软件解决异步的问题。\n" +
+                "为什么你在床里面睡着？";
+        final String ans = "滑鼠裡面的矽二極體壞了，導致游標解析度降低。\n" +
+                "我們在寮國的伺服器的硬碟需要使用網際網路演算法軟體解決非同步的問題。\n" +
+                "為什麼你在床裡面睡著？";
+        ZhConvertBootstrap bootstrap = ZhConvertBootstrap
+                .newInstance()
+                .segment(Segments.huaBan())
+                .variant(Variants.tw())
+                .idiom(Idioms.tw());
+        String actual = bootstrap.toTraditional(original);
+        Assert.assertEquals(ans, actual);
     }
 
 }

@@ -41,5 +41,22 @@ public interface IDataMap {
      */
     Map<String, List<String>> stChar();
 
+    /**
+     * 台湾常用语
+     * @return 结果
+     */
+    Map<String, List<String>> twIdioms();
+
+    /**
+     * 台湾变体
+     * @return 结果
+     */
+    Map<String, List<String>> twVariants();
+
+    /**
+     * 香港变体
+     * @return 结果
+     */
+    Map<String, List<String>> hkVariants();
 
 }

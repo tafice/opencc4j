@@ -52,4 +52,28 @@ public final class OpenccDatas {
         return Instances.singleton(STPhraseData.class);
     }
 
+    /**
+     * 台湾常用语
+     * @return 实现
+     */
+    public static Data twIdioms() {
+        return Instances.singleton(TWIdiomsData.class);
+    }
+
+    /**
+     * 台湾变体
+     * @return 实现
+     */
+    public static Data twVariants() {
+        return Instances.singleton(TWVariantsData.class);
+    }
+
+    /**
+     * 香港变体
+     * @return 实现
+     */
+    public static Data hkVariants() {
+        return Instances.singleton(HKVariantsData.class);
+    }
+
 }

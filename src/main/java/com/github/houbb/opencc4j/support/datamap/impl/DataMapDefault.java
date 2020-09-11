@@ -38,4 +38,18 @@ public class DataMapDefault implements IDataMap {
         return OpenccDatas.stChar().data().getDataMap();
     }
 
+    @Override
+    public Map<String, List<String>> twIdioms() {
+        return OpenccDatas.twIdioms().data().getDataMap();
+    }
+
+    @Override
+    public Map<String, List<String>> twVariants() {
+        return OpenccDatas.twVariants().data().getDataMap();
+    }
+
+    @Override
+    public Map<String, List<String>> hkVariants() {
+        return OpenccDatas.hkVariants().data().getDataMap();
+    }
 }

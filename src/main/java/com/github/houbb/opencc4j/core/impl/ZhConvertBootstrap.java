@@ -9,15 +9,15 @@ import com.github.houbb.opencc4j.core.ZhConvert;
 import com.github.houbb.opencc4j.support.convert.context.impl.DefaultUnitConvertContext;
 import com.github.houbb.opencc4j.support.convert.core.UnitConvert;
 import com.github.houbb.opencc4j.support.convert.core.impl.DefaultUnitConvert;
-import com.github.houbb.opencc4j.support.data.Data;
-import com.github.houbb.opencc4j.support.data.impl.OpenccDatas;
-import com.github.houbb.opencc4j.support.data.impl.TSCharData;
-import com.github.houbb.opencc4j.support.data.impl.TSPhraseData;
 import com.github.houbb.opencc4j.support.datamap.IDataMap;
 import com.github.houbb.opencc4j.support.datamap.impl.DataMaps;
+import com.github.houbb.opencc4j.support.idiom.Idiom;
+import com.github.houbb.opencc4j.support.idiom.Idioms;
 import com.github.houbb.opencc4j.support.segment.Segment;
 import com.github.houbb.opencc4j.support.segment.impl.CharSegment;
 import com.github.houbb.opencc4j.support.segment.impl.Segments;
+import com.github.houbb.opencc4j.support.variants.Variant;
+import com.github.houbb.opencc4j.support.variants.Variants;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +43,16 @@ public class ZhConvertBootstrap implements ZhConvert {
      * @since 1.5.2
      */
     private IDataMap dataMap = DataMaps.defaults();
+
+    /**
+     * 常用语实现
+     */
+    private Idiom idiom = Idioms.defaults();
+
+    /**
+     * 变体实现
+     */
+    private Variant variant = Variants.defaults();
 
     /**
      * 构造器私有化
@@ -85,14 +95,36 @@ public class ZhConvertBootstrap implements ZhConvert {
         return this;
     }
 
+    /**
+     * 常用语实现
+     * @param idiom
+     * @return 引导类
+     */
+    public ZhConvertBootstrap idiom(final Idiom idiom) {
+        ArgUtil.notNull(idiom, "idiom");
+        this.idiom = idiom;
+        return this;
+    }
+
+    /**
+     * 变体实现
+     * @param variant
+     * @return 引导类
+     */
+    public ZhConvertBootstrap variant(final Variant variant) {
+        ArgUtil.notNull(variant, "variant");
+        this.variant = variant;
+        return this;
+    }
+
     @Override
     public String toSimple(String original) {
-        return this.convert(original, segment, dataMap.tsPhrase(), dataMap.tsChar());
+        return this.convert(original, segment, dataMap.tsPhrase(), dataMap.tsChar(), Idioms.defaults().data(), Variants.defaults().data());
     }
 
     @Override
     public String toTraditional(String original) {
-        return this.convert(original, segment, dataMap.stPhrase(), dataMap.stChar());
+        return this.convert(original, segment, dataMap.stPhrase(), dataMap.stChar(), idiom.data(), variant.data());
     }
 
     /**
@@ -207,13 +239,17 @@ public class ZhConvertBootstrap implements ZhConvert {
      * @param segment 分词实现
      * @param charData 单个词数据
      * @param phraseData 词组数据
+     * @param idiomData 常用语数据
+     * @param variantsData 变体数据
      * @return 转换后的结果
      * @since 1.1.0
      */
     private String convert(final String original,
                            final Segment segment,
                            final Map<String, List<String>> phraseData,
-                           final Map<String, List<String>> charData) {
+                           final Map<String, List<String>> charData,
+                           final Map<String, List<String>> idiomData,
+                           final Map<String, List<String>> variantsData) {
         //1. fast-fail
         if(StringUtil.isEmpty(original)) {
             return original;
@@ -228,6 +264,8 @@ public class ZhConvertBootstrap implements ZhConvert {
         final DefaultUnitConvertContext unitConvertContext = new DefaultUnitConvertContext();
         unitConvertContext.setPhraseData(phraseData);
         unitConvertContext.setCharData(charData);
+        unitConvertContext.setIdiomData(idiomData);
+        unitConvertContext.setVariantsData(variantsData);
 
         //3. 构建结果
         StringBuilder stringBuilder = new StringBuilder();

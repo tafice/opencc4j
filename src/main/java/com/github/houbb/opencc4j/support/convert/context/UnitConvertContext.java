@@ -28,4 +28,16 @@ public interface UnitConvertContext {
      */
     Map<String, List<String>> getPhraseData();
 
+    /**
+     * 获取常用语数据
+     * @return 常用语数据
+     */
+    Map<String, List<String>> getIdiomData();
+
+    /**
+     * 获取变体数据
+     * @return 变体数据
+     */
+    Map<String, List<String>> getVariantsData();
+
 }
